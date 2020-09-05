@@ -10,11 +10,16 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    hello: () => 'Hello world!',
+    hello: (parent, args, context) => context.test,
   },
 };
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs, resolvers, context: async ({ req }) => {
+    return {
+      test: true
+    };
+  }});
 
 const app = express();
 server.applyMiddleware({ app });
